@@ -8,7 +8,6 @@ package gkafka_test
 
 import (
     "fmt"
-    "github.com/gogf/gf/g/os/gtime"
     "github.com/gogf/gkafka"
     "testing"
     "time"
@@ -38,7 +37,7 @@ func Test_Producer(t *testing.T) {
     client := newKafkaClientProducer("test")
     defer client.Close()
     for {
-        s := gtime.Now().String()
+        s := time.Now().String()
         fmt.Println("produce:", s)
         if err := client.SyncSend(&gkafka.Message{Value: []byte(s)}); err != nil {
             fmt.Println(err)

@@ -10,9 +10,10 @@
 package gkafka
 
 import (
-    "github.com/gogf/gf/g/os/glog"
+    "fmt"
     "github.com/gogf/gkafka/third/github.com/Shopify/sarama"
     "github.com/gogf/gkafka/third/github.com/johngcn/sarama-cluster"
+    "os"
     "strings"
     "time"
 )
@@ -213,7 +214,7 @@ func (client *Client) AsyncSend(message *Message) error {
                    select {
                        case err := <-errors:
                            if err != nil {
-                               glog.Error(err)
+                               fmt.Fprintln(os.Stderr, err)
                            }
                        case <-success:
                    }
