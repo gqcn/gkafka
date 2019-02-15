@@ -9,32 +9,20 @@ package gkafka_test
 import (
     "fmt"
     "github.com/gogf/gkafka"
-    "testing"
     "time"
 )
 
-// 创建kafka生产客户端
-func newKafkaClientProducer(topic string) *gkafka.Client {
-    kafkaConfig               := gkafka.NewConfig()
-    kafkaConfig.Servers        = "localhost:9092"
-    kafkaConfig.AutoMarkOffset = false
-    kafkaConfig.Topics         = topic
-    return gkafka.NewClient(kafkaConfig)
-}
-
-// 创建kafka消费客户端
-func newKafkaClientConsumer(topic, group string) *gkafka.Client {
-    kafkaConfig               := gkafka.NewConfig()
-    kafkaConfig.Servers        = "localhost:9092"
-    kafkaConfig.AutoMarkOffset = false
-    kafkaConfig.Topics         = topic
-    kafkaConfig.GroupId        = group
-    return gkafka.NewClient(kafkaConfig)
-}
-
+// Create producer.
+//
 // 生产者
-func Test_Producer(t *testing.T) {
-    client := newKafkaClientProducer("test")
+func Example_producer() {
+    topic                     := "test"
+    kafkaConfig               := gkafka.NewConfig()
+    kafkaConfig.Servers        = "localhost:9092"
+    kafkaConfig.AutoMarkOffset = false
+    kafkaConfig.Topics         = topic
+
+    client := gkafka.NewClient(kafkaConfig)
     defer client.Close()
     for {
         s := time.Now().String()
@@ -46,11 +34,19 @@ func Test_Producer(t *testing.T) {
     }
 }
 
+// Create consumer.
+//
 // 消费者
-func Test_Consumer(t *testing.T) {
-    group  := "test-group"
-    topic  := "test"
-    client := newKafkaClientConsumer(topic, group)
+func Example_consumer() {
+    group                     := "test-group"
+    topic                     := "test"
+    kafkaConfig               := gkafka.NewConfig()
+    kafkaConfig.Servers        = "localhost:9092"
+    kafkaConfig.AutoMarkOffset = false
+    kafkaConfig.Topics         = topic
+    kafkaConfig.GroupId        = group
+
+    client := gkafka.NewClient(kafkaConfig)
     defer client.Close()
 
     // 标记开始读取的offset位置
@@ -66,8 +62,10 @@ func Test_Consumer(t *testing.T) {
     }
 }
 
+// Fetch all topics from server.
+//
 // 获取所有topics
-func Test_Topics(t *testing.T) {
+func Example_topics() {
     config        := gkafka.NewConfig()
     config.Servers = "localhost:9092"
 
