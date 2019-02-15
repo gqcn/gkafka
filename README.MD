@@ -13,6 +13,7 @@ require github.com/gogf/gkafka latest
 
 # Documentation
 
+* [中文文档](https://goframe.org/database/gkafka/index)
 * [godoc.org/github.com/gogf/gkafka](https://godoc.org/github.com/gogf/gkafka)
 
 # Quick Start
