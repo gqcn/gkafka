@@ -1,10 +1,4 @@
-# gkafka 
-
-[![Go Doc](https://godoc.org/github.com/gogf/gkafka?status.svg)](https://godoc.org/github.com/gogf/gkafka)
-[![Documents](https://img.shields.io/badge/docs-100%25-green.svg)](https://goframe.org) 
-[![License](https://img.shields.io/github/license/gogf/gkafka.svg?style=flat)](https://github.com/gogf/gkafka)
-[![Language](https://img.shields.io/badge/language-go-blue.svg)](https://github.com/gogf/gkafka)
-[![Release](https://img.shields.io/github/release/gogf/gkafka.svg?style=flat)](https://github.com/gogf/gkafka/releases)
+# gkafka [![Go Doc](https://godoc.org/github.com/gogf/gkafka?status.svg)](https://godoc.org/github.com/gogf/gkafka) [![Documents](https://img.shields.io/badge/docs-100%25-green.svg)](https://goframe.org) [![License](https://img.shields.io/github/license/gogf/gkafka.svg?style=flat)](https://github.com/gogf/gkafka) [![Language](https://img.shields.io/badge/language-go-blue.svg)](https://github.com/gogf/gkafka) [![Release](https://img.shields.io/github/release/gogf/gkafka.svg?style=flat)](https://github.com/gogf/gkafka/releases)
 
 Package gkafka provides producer and consumer client for kafka server.
 
@@ -19,7 +13,7 @@ require github.com/gogf/gkafka latest
 
 # Documentation
 
-* https://godoc.org/github.com/gogf/gkafka
+* [godoc.org/github.com/gogf/gkafka](https://godoc.org/github.com/gogf/gkafka)
 
 # Quick Start
 
@@ -88,6 +82,27 @@ func main()  {
     }
 }
 ```
+
+## Topics
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/gogf/gkafka"
+)
+
+func main()  {
+    config        := gkafka.NewConfig()
+    config.Servers = "localhost:9092"
+
+    client := gkafka.NewClient(config)
+    defer client.Close()
+
+    fmt.Println(client.Topics())
+}
+```
+
 
 # License
 
