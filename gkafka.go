@@ -25,7 +25,7 @@ var (
     }
 )
 
-// kafka Client based on sarama.Config
+// Kafka client config based on sarama.Config
 type Config struct {
     sarama.Config
     GroupId        string // group id for consumer.
@@ -63,6 +63,8 @@ func NewClient(config *Config) *Client {
 }
 
 // New a default configuration object.
+//
+// 创建一个默认的客户端配置对象。
 func NewConfig() *Config {
     config       := &Config{}
     config.Config = *sarama.NewConfig()
@@ -82,6 +84,8 @@ func NewConfig() *Config {
 }
 
 // Close client.
+//
+// 关闭客户端
 func (client *Client) Close() {
     if client.rawConsumer != nil {
         client.rawConsumer.Close()
@@ -98,6 +102,7 @@ func (client *Client) Close() {
 }
 
 // Get all topics from kafka server.
+//
 // 这里创建独立的消费客户端获取topics，获取完之后销毁该客户端对象。
 func (client *Client) Topics() ([]string, error) {
     if c, err := sarama.NewConsumer(strings.Split(client.Config.Servers, ","), &client.Config.Config); err != nil {
@@ -133,6 +138,8 @@ func (client *Client) initConsumer() error {
     return nil
 }
 
+// Mark the start offset for consumer.
+//
 // 标记指定topic 分区开始读取位置
 func (client *Client) MarkOffset(topic string, partition int, offset int, metadata...string) error {
     if err := client.initConsumer(); err != nil {
@@ -147,7 +154,10 @@ func (client *Client) MarkOffset(topic string, partition int, offset int, metada
 }
 
 
-// Receive message from kafka from specified topics in config, in BLOCKING way, gkafka will handle offset tracking automatically.
+// Receive message from kafka from specified topics in config, in BLOCKING way,
+// gkafka will handle offset tracking automatically.
+//
+// 阻塞获取kafka消息。
 func (client *Client) Receive() (*Message, error) {
     if err := client.initConsumer(); err != nil {
         return nil, err
@@ -182,6 +192,8 @@ func (client *Client) Receive() (*Message, error) {
 }
 
 // Send data to kafka in synchronized way.
+//
+// 同步发送/生产kafka消息。
 func (client *Client) SyncSend(message *Message) error {
     if client.syncProducer == nil {
         if p, err := sarama.NewSyncProducer(strings.Split(client.Config.Servers, ","), &client.Config.Config); err != nil {
@@ -201,6 +213,8 @@ func (client *Client) SyncSend(message *Message) error {
 }
 
 // Send data to kafka in asynchronized way(concurrent safe).
+//
+// 异步发送/生产kafka消息(并发安全)。
 func (client *Client) AsyncSend(message *Message) error {
     if client.asyncProducer == nil {
         if p, err := sarama.NewAsyncProducer(strings.Split(client.Config.Servers, ","), &client.Config.Config); err != nil {
@@ -232,6 +246,8 @@ func (client *Client) AsyncSend(message *Message) error {
 }
 
 // Convert *gkafka.Message to *sarama.ProducerMessage
+//
+// 内部使用，转换消息，用于发送。
 func messageToProducerMessage(message *Message) *sarama.ProducerMessage {
     return &sarama.ProducerMessage {
         Topic     : message.Topic,

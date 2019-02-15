@@ -6,6 +6,8 @@
 
 package gkafka
 
+// Mark current message consumed.
+//
 // 自动标记已读取
 func (msg *Message) MarkOffset() {
     if msg.consumerMsg != nil && msg.client != nil && msg.client.consumer != nil {
