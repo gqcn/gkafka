@@ -6,9 +6,7 @@
 
 package gkafka
 
-// Mark current message consumed.
-//
-// 自动标记已读取
+// MarkOffset marks current message as consumed.
 func (msg *Message) MarkOffset() {
     if msg.consumerMsg != nil && msg.client != nil && msg.client.consumer != nil {
         msg.client.consumer.MarkOffset(msg.consumerMsg, "")

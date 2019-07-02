@@ -5,7 +5,7 @@ import (
     "github.com/gogf/gkafka"
 )
 
-// 创建kafka消费客户端
+// newKafkaClientConsumer creates and returns a new kafka producer client.
 func newKafkaClientConsumer(topic, group string) *gkafka.Client {
     kafkaConfig               := gkafka.NewConfig()
     kafkaConfig.Servers        = "localhost:9092"
@@ -21,8 +21,8 @@ func main()  {
     client := newKafkaClientConsumer(topic, group)
     defer client.Close()
 
-    // 标记开始读取的offset位置
-    client.MarkOffset(topic, 0, 6)
+	// Mark the offset from reading.
+    //client.MarkOffset(topic, 0, 6)
     for {
         if msg, err := client.Receive(); err != nil {
             fmt.Println(err)

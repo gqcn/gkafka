@@ -13,8 +13,6 @@ import (
 )
 
 // Create producer.
-//
-// 生产者
 func Example_producer() {
     topic                     := "test"
     kafkaConfig               := gkafka.NewConfig()
@@ -35,8 +33,6 @@ func Example_producer() {
 }
 
 // Create consumer.
-//
-// 消费者
 func Example_consumer() {
     group                     := "test-group"
     topic                     := "test"
@@ -49,7 +45,7 @@ func Example_consumer() {
     client := gkafka.NewClient(kafkaConfig)
     defer client.Close()
 
-    // 标记开始读取的offset位置
+    // Mark the offset from reading.
     client.MarkOffset(topic, 0, 6)
     for {
         if msg, err := client.Receive(); err != nil {
@@ -63,8 +59,6 @@ func Example_consumer() {
 }
 
 // Fetch all topics from server.
-//
-// 获取所有topics
 func Example_topics() {
     config        := gkafka.NewConfig()
     config.Servers = "localhost:9092"

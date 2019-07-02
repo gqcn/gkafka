@@ -6,7 +6,7 @@ import (
     "time"
 )
 
-// 创建kafka生产客户端
+// newKafkaClientProducer creates and returns a new kafka producer client.
 func newKafkaClientProducer(topic string) *gkafka.Client {
     kafkaConfig               := gkafka.NewConfig()
     kafkaConfig.Servers        = "localhost:9092"

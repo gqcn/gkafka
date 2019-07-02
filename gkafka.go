@@ -5,8 +5,6 @@
 // You can obtain one at https://github.com/gogf/gf.
 
 // Package gkafka provides producer and consumer client for kafka server.
-//
-// Kafka客户端.
 package gkafka
 
 import (
@@ -62,9 +60,7 @@ func NewClient(config *Config) *Client {
     }
 }
 
-// New a default configuration object.
-//
-// 创建一个默认的客户端配置对象。
+// NewConfig creates and returns a default configuration object.
 func NewConfig() *Config {
     config       := &Config{}
     config.Config = *sarama.NewConfig()
@@ -83,9 +79,7 @@ func NewConfig() *Config {
     return config
 }
 
-// Close client.
-//
-// 关闭客户端
+// Close closes the client.
 func (client *Client) Close() {
     if client.rawConsumer != nil {
         client.rawConsumer.Close()
@@ -101,9 +95,7 @@ func (client *Client) Close() {
     }
 }
 
-// Get all topics from kafka server.
-//
-// 这里创建独立的消费客户端获取topics，获取完之后销毁该客户端对象。
+// Topics returns all topics from kafka server.
 func (client *Client) Topics() ([]string, error) {
     if c, err := sarama.NewConsumer(strings.Split(client.Config.Servers, ","), &client.Config.Config); err != nil {
         return nil, err
@@ -122,7 +114,7 @@ func (client *Client) Topics() ([]string, error) {
     }
 }
 
-// 初始化内部消费客户端
+// initConsumer initializes the client.
 func (client *Client) initConsumer() error {
     if client.consumer == nil {
         config       := cluster.NewConfig()
@@ -138,9 +130,7 @@ func (client *Client) initConsumer() error {
     return nil
 }
 
-// Mark the start offset for consumer.
-//
-// 标记指定topic 分区开始读取位置
+// MarkOffset marks the start offset for consumer.
 func (client *Client) MarkOffset(topic string, partition int, offset int, metadata...string) error {
     if err := client.initConsumer(); err != nil {
         return err
@@ -154,10 +144,8 @@ func (client *Client) MarkOffset(topic string, partition int, offset int, metada
 }
 
 
-// Receive message from kafka from specified topics in config, in BLOCKING way,
-// gkafka will handle offset tracking automatically.
-//
-// 阻塞获取kafka消息。
+// Receive receives message from kafka from specified topics in config, in BLOCKING way.
+// It will handle offset tracking automatically.
 func (client *Client) Receive() (*Message, error) {
     if err := client.initConsumer(); err != nil {
         return nil, err
@@ -191,9 +179,7 @@ func (client *Client) Receive() (*Message, error) {
     }
 }
 
-// Send data to kafka in synchronized way.
-//
-// 同步发送/生产kafka消息。
+// SyncSend sends data to kafka in synchronized way.
 func (client *Client) SyncSend(message *Message) error {
     if client.syncProducer == nil {
         if p, err := sarama.NewSyncProducer(strings.Split(client.Config.Servers, ","), &client.Config.Config); err != nil {
@@ -212,9 +198,7 @@ func (client *Client) SyncSend(message *Message) error {
     return nil
 }
 
-// Send data to kafka in asynchronized way(concurrent safe).
-//
-// 异步发送/生产kafka消息(并发安全)。
+// AsyncSend sends data to kafka in asynchronized way(concurrent safe).
 func (client *Client) AsyncSend(message *Message) error {
     if client.asyncProducer == nil {
         if p, err := sarama.NewAsyncProducer(strings.Split(client.Config.Servers, ","), &client.Config.Config); err != nil {
@@ -245,9 +229,7 @@ func (client *Client) AsyncSend(message *Message) error {
     return nil
 }
 
-// Convert *gkafka.Message to *sarama.ProducerMessage
-//
-// 内部使用，转换消息，用于发送。
+// messageToProducerMessage converts *gkafka.Message to *sarama.ProducerMessage
 func messageToProducerMessage(message *Message) *sarama.ProducerMessage {
     return &sarama.ProducerMessage {
         Topic     : message.Topic,
